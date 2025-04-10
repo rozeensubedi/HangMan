@@ -30,6 +30,12 @@ Features
 
 - Responsive Design
 
+Screenshots
+
+![image alt](https://github.com/rozeensubedi/HangMan/blob/93e46bd62bfef63bc2076b6e5757954d431b2f06/Hangman.png)
+
+![image alt](https://github.com/rozeensubedi/HangMan/blob/93e46bd62bfef63bc2076b6e5757954d431b2f06/HangmanGame.png)
+
 Project Structure
 
 hangman.html    # Main HTML file
