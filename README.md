@@ -73,7 +73,7 @@ Installation
     - Add hangman image files to the /img folder.
     - Add the applause sound file to the /sound folder.
   
-3.  Open index.html in your browser to start playing!
+3.  Open hangman.html in your browser to start playing!
 
 
   
