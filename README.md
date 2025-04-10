@@ -32,8 +32,8 @@ Features
 
 Project Structure
 
-index.html    # Main HTML file
-/img          # Folder for hangman image assets (stickman.jpg, stickman-                     1.jpg, ..., stickman-6.jpg)
+hangman.html    # Main HTML file
+/img          # Folder for hangman image assets (stickman.jpg, stickman-1.jpg, ..., stickman-6.jpg)
 /sound        # Folder containing 'applause-sound.mp3'
 /README.md    # You're reading it!
 
