@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hangman Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #1f2937;
+      --accent: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff, #fef9c3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #wrapper {
+      width: 100%;
+      max-width: 600px;
+      padding: 1rem;
+    }
+
+    .card {
+      background-color: var(--card);
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    label, select, input {
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+      font-weight: 600;
+    }
+
+    input, select {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      padding: 0.7rem 2rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    .highScore {
+      margin-top: 1.2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .scoreboard p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .keyboard button {
+      margin: 5px;
+      padding: 10px 14px;
+      font-size: 16px;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .keyboard button:disabled {
+      background-color: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .keyboard button:hover:not(:disabled) {
+      background-color: #5041f2;
+    }
+
+    #mainImage {
+      max-width: 150px;
+      margin: 1rem auto;
+      display: block;
+    }
+
+    #question {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    #guesses {
+      font-size: 1.5rem;
+      color: red;
+    }
+
+    #guess {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    #wordDisplay {
+      font-size: 1.5rem;
+      letter-spacing: 0.5rem;
+      margin: 2rem 0;
+    }
+
+    #customAlert {
+      position: fixed;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffbea;
+      color: #333;
+      border: 2px solid #fcd34d;
+      padding: 20px 40px;
+      font-size: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+      animation: popupFade 0.5s ease-out forwards;
+    }
+
+    @keyframes popupFade {
+      from { transform: translate(-50%, 50%); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    .emoji {
+      position: fixed;
+      font-size: 30px;
+      animation: emojiBurst 1s ease-out forwards;
+      z-index: 999;
+    }
+
+    @keyframes emojiBurst {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
+    }
+
+    .hidden {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <div class="card">
+      <div id="start-page">
+        <h1>Hangman Game</h1>
+        <label>Enter Your Name: <input type="text" id="playerName" required></label><br><br>
+        <label>Choose Level:
+          <select id="difficulty">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </label><br><br>
+        <button onclick="startGame()">Start Game</button>
+        <p class="highScore">High Score: <span id="highScore">0</span></p>
+      </div>
+
+      <div id="game-page" class="hidden">
+        <div class="scoreboard">
+          <p>Score: <span id="score">0</span> | High Score: <span id="highScoreInGame">0</span></p>
+          <p>Level: <span id="currentLevel">Easy</span></p>
+        </div>
+        <img id="mainImage" src="../img/stickman.jpg" alt="Hangman Image" width="200">
+        <h1>HANGMAN</h1>
+        <p id="question"></p>
+        <h2 id="wordDisplay"></h2>
+        <p id="guess">Guesses: <span id="guesses">0</span>/6</p>
+        <div class="keyboard" id="keyboard"></div>
+        <button onclick="endGame()">End Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customAlert">🎉 Congratulations! You scored the highest! 🎉</div>
+  <audio id="congratsSound" src="../sound/applause-sound.mp3" preload="auto"></audio>
+
+  <script>
+    const easyWords = [
+      { word: "pacific", question: "What is the largest ocean on Earth?" },
+      { word: "banana", question: "A yellow fruit that monkeys love?" },
+      { word: "orange", question: "A citrus fruit that is also a color?" }
+    ];
+
+    const mediumWords = [
+      { word: "chickpea", question: "What is the term 'chana' in Nepali for?" },
+      { word: "iceland", question: "What is a country with no police and no prison?" },
+      { word: "nuwakot", question: "In which district is the ‘Fungfung’ waterfall?" }
+    ];
+
+    const hardWords = [
+      { word: "dashain", question: "What is the name of the most auspicious Hindu festive celebrated in Nepal?" },
+      { word: "mahakaliriver", question: "On which river does the Nilgad mix?" },
+      { word: "shukrarajshastri", question: "Who was the first to use the word ‘Jai Nepal?" },
+      { word: "prithvihighway", question: "What is the name of road Kathmandu – Pokhara?" }
+    ];
+
+    let selectedWordData, selectedWord = "", question = "";
+    let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6, currentDifficulty = "Easy";
+
+    function startGame() {
+      const name = document.getElementById('playerName').value.trim();
+      if (!name) return alert("Name is required!");
+
+      currentDifficulty = document.getElementById('difficulty').value;
+      document.getElementById('start-page').classList.add('hidden');
+      document.getElementById('game-page').classList.remove('hidden');
+      document.getElementById("currentLevel").innerText = currentDifficulty;
+
+      score = 0;
+      highScore = localStorage.getItem("hangmanHighScore") || 0;
+      document.getElementById("score").innerText = score;
+      document.getElementById("highScore").innerText = highScore;
+      document.getElementById("highScoreInGame").innerText = highScore;
+
+      loadNewWord();
+    }
+
+    function loadNewWord() {
+      let wordList = currentDifficulty === "Easy" ? easyWords : currentDifficulty === "Medium" ? mediumWords : hardWords;
+      selectedWordData = wordList[Math.floor(Math.random() * wordList.length)];
+      selectedWord = selectedWordData.word.toLowerCase();
+      question = selectedWordData.question;
+      guessedLetters = [];
+      guesses = 0;
+
+      document.getElementById("question").textContent = question;
+      document.getElementById("guesses").textContent = guesses;
+      updateWordDisplay();
+      updateKeyboard();
+      updateImage();
+    }
+
+    function updateWordDisplay() {
+      let display = "";
+      for (let char of selectedWord) {
+        display += guessedLetters.includes(char) ? char + " " : "_ ";
+      }
+      document.getElementById("wordDisplay").textContent = display.trim();
+    }
+
+    function updateKeyboard() {
+      const keyboard = document.getElementById("keyboard");
+      keyboard.innerHTML = '';
+      for (let i = 65; i <= 90; i++) {
+        const char = String.fromCharCode(i).toLowerCase();
+        const btn = document.createElement("button");
+        btn.textContent = char.toUpperCase();
+        btn.id = char;
+        btn.disabled = guessedLetters.includes(char) || guesses >= maxGuesses;
+        btn.onclick = () => handleLetterClick(char);
+        keyboard.appendChild(btn);
+      }
+    }
+
+    function handleLetterClick(letter) {
+      if (guessedLetters.includes(letter)) return;
+      guessedLetters.push(letter);
+      document.getElementById(letter).disabled = true;
+
+      if (selectedWord.includes(letter)) {
+        updateWordDisplay();
+        if (isWordGuessed()) {
+          score += 5;
+          const wasHighScore = score > highScore;
+          updateScore();
+
+          if (wasHighScore) {
+            showCustomAlert();
+            playCongratsSound();
+            burstEmojis();
+          }
+
+          setTimeout(loadNewWord, 1000);
+        }
+      } else {
+        guesses++;
+        document.getElementById("guesses").textContent = guesses;
+        updateImage();
+        if (guesses >= maxGuesses) {
+          alert("Game Over! The word was: " + selectedWord);
+          endGame();
+        }
+      }
+
+      updateKeyboard();
+    }
+
+    function isWordGuessed() {
+      return [...selectedWord].every(char => guessedLetters.includes(char));
+    }
+
+    function updateScore() {
+      document.getElementById("score").textContent = score;
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("hangmanHighScore", score);
+        document.getElementById("highScore").textContent = score;
+        document.getElementById("highScoreInGame").textContent = score;
+      }
+    }
+
+    function updateImage() {
+      const image = document.getElementById("mainImage");
+      image.src = `../img/stickman${guesses === 0 ? "" : "-" + guesses}.jpg`;
+    }
+
+    function showCustomAlert() {
+      const alertBox = document.getElementById("customAlert");
+      alertBox.style.display = "block";
+      setTimeout(() => {
+        alertBox.style.display = "none";
+      }, 2000);
+    }
+
+    function playCongratsSound() {
+      const audio = document.getElementById("congratsSound");
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function burstEmojis() {
+      for (let i = 0; i < 10; i++) {
+        createEmoji("🎉", "left");
+        createEmoji("🎊", "right");
+      }
+    }
+
+    function createEmoji(char, side) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = char;
+      emoji.style.left = side === "left" ? "0px" : "calc(100% - 30px)";
+      emoji.style.bottom = "0px";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 2000);
+    }
+
+    function endGame() {
+      document.getElementById("start-page").classList.remove("hidden");
+      document.getElementById("game-page").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>
