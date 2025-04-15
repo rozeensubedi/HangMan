@@ -39,7 +39,7 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 🗂️ Project Structure
 
-hangman
+- hangman
 	/img                    	# Hangman image assets
 		stickman.jpg
 		stickman-1.jpg
