@@ -86,9 +86,9 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 1. Clone the repository:
 
-  - git clone https://github.com/rozeensubedi/Hangman.git
-    
-  - cd hangman-game
+	- git clone https://github.com/rozeensubedi/Hangman.git
+
+	- cd hangman-game
 
 2. Add your own media (optional):
 
