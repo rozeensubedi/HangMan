@@ -39,18 +39,18 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 🗂️ Project Structure
 
-- hangman
-	/img                    	# Hangman image assets
-		stickman.jpg
-		stickman-1.jpg
-		... up to stickman-6.jpg
-		startPage.png
-		mainPage.png
-	/sound                  	# Sound effects
-		applause-sound.mp3
-	README.md               	# Project documentation (this file)
-	hangman.html              	# Main HTML file
-	hangman.css                	# CSS Stylesheet
+- hangman				# Main folder
+	- /img                    	# Hangman image folder
+		- stickman.jpg
+		- stickman-1.jpg
+		- ... up to stickman-6.jpg
+		- startPage.png
+		- mainPage.png
+	- /sound                  	# Sound folder
+		- applause-sound.mp3
+	- README.md               	# Project documentation (this file)
+	- hangman.html              	# Main HTML file
+	- hangman.css                	# CSS Stylesheet
 
 ---
 
