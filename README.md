@@ -74,11 +74,11 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 💎 Custom Features Highlight
 
-- Animated Emoji Burst – celebratory 🎉 and 🎊 emoji effects when achieving a new 	high score.
+- Animated Emoji Burst – celebratory 🎉 and 🎊 emoji effects when achieving a new high score.
 
-- Custom Alert Popup – congratulatory message with animation for high score 	achievement.
+- Custom Alert Popup – congratulatory message with animation for high score achievement.
 
-- Progressive Hangman Image – updates image step-by-step as wrong guesses 	increase.
+- Progressive Hangman Image – updates image step-by-step as wrong guesses increase.
 
 ---
 
@@ -86,8 +86,9 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 1. Clone the repository:
 
-  - git clone https://github.com/yourusername/hangman-game.git
-	- cd hangman-game
+  - git clone https://github.com/rozeensubedi/Hangman.git
+    
+  - cd hangman-game
 
 2. Add your own media (optional):
 
