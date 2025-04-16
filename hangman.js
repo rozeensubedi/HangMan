@@ -45,7 +45,6 @@ async function loadNewWord() {
   let category = document.getElementById("category").value || "food";
   let apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${numLetters}`;
 
-
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
@@ -152,7 +151,7 @@ function updateScore() {
 
 function updateImage() {
   const image = document.getElementById("mainImage");
-  image.src = `../hangman/img/stickman${guesses === 0 ? "" : "-" + guesses}.jpg`;
+  image.src = `img/stickman${guesses === 0 ? "" : "-" + guesses}.jpg`;
 }
 
 function showCustomAlert() {
