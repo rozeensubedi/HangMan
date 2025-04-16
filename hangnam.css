@@ -135,6 +135,25 @@ button:hover {
   text-transform: uppercase;
 }
 
+.custom-message {
+  display: none;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffdddd;
+  padding: 20px 30px;
+  border: 2px solid #f44336;
+  border-radius: 10px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.2em;
+  color: #333;
+  z-index: 9999;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+
 #customAlert {
   position: fixed;
   bottom: 20%;

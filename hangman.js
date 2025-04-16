@@ -32,6 +32,10 @@ function startGame() {
   document.getElementById('game-page').classList.remove('hidden');
   document.getElementById("currentLevel").innerText = currentDifficulty;
 
+  
+  document.getElementById("gameOverAlert").style.display = "none";
+  document.getElementById("customAlert").style.display = "none";
+
   score = 0;
   highScore = parseInt(localStorage.getItem("hangmanHighScore")) || 0;
   document.getElementById("score").innerText = score;
@@ -40,6 +44,7 @@ function startGame() {
 
   loadNewWord();
 }
+
 async function loadNewWord() {
   let numLetters = currentDifficulty === "Easy" ? 4 : currentDifficulty === "Medium" ? 6 : 6;
   let category = document.getElementById("category").value || "food";
@@ -53,7 +58,7 @@ async function loadNewWord() {
     if (!data || !data.length) {
       alert("No data found.");
       return;
-    }
+    }//////
 
     const randomWordData = data[Math.floor(Math.random() * data.length)];
     selectedWord = randomWordData.word.toLowerCase();
@@ -63,7 +68,7 @@ async function loadNewWord() {
     guesses = 0;
 
     document.getElementById("hint").textContent = hint;
-    document.getElementById("guesses").textContent = guesses;
+    document.getElementById("guesses").textContent = `${guesses}/6`;
     updateWordDisplay();
     updateKeyboard();
     updateImage();
@@ -125,12 +130,17 @@ function handleLetterClick(letter) {
     }
   } else {
     guesses++;
-    document.getElementById("guesses").textContent = guesses;
+    document.getElementById("guesses").textContent = `${guesses}/6`;
     updateImage();
+
+
     if (guesses >= maxGuesses) {
-      alert("Game Over! The word was: " + selectedWord);
-      endGame();
-    }
+      document.getElementById("guesses").textContent = `${guesses}/6`;
+      updateImage();
+      setTimeout(() => {
+        showGameOverMessage(selectedWord);
+      }, 100);
+    } 
   }
 
   updateKeyboard();
@@ -154,6 +164,20 @@ function updateImage() {
   const image = document.getElementById("mainImage");
   image.src = `img/stickman${guesses === 0 ? "" : "-" + guesses}.jpg`;
 }
+
+function showGameOverMessage(word) {
+  // const alertBox = document.getElementById("gameOverAlert");
+  document.getElementById("gameOverAlert").style.display = "none";
+
+  document.getElementById("revealedWord").textContent = word;
+  alertBox.style.display = "block";
+  
+  setTimeout(() => {
+    alertBox.style.display = "none";
+    endGame();
+  }, 3000); 
+}
+
 
 function showCustomAlert() {
   const alertBox = document.getElementById("customAlert");
@@ -189,4 +213,16 @@ function createEmoji(char, side) {
 function endGame() {
   document.getElementById("start-page").classList.remove("hidden");
   document.getElementById("game-page").classList.add("hidden");
+}
+
+function showGameOverMessage(word) {
+  const alertBox = document.getElementById("gameOverAlert");
+  document.getElementById("revealedWord").textContent = word;
+  alertBox.style.display = "block";
+  disableKeyboard();
+}
+
+function disableKeyboard() {
+  const buttons = document.querySelectorAll("#keyboard button");
+  buttons.forEach(btn => btn.disabled = true);
 }

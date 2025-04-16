@@ -40,15 +40,19 @@
         <h1>HANGMAN</h1>
         <p id="hint"><span></span></p>
         <h2 id="wordDisplay"></h2>
-        <p id="guess">Guesses: <span id="guesses">0</span>/6</p>
+        <p id="guess">Guesses: <span id="guesses">0</span></p>
         <div class="keyboard" id="keyboard"></div>
         <button onclick="endGame()">End Game</button>
+        <button onclick="startGame()">Restart </button>
       </div>
     </div>
   </div>
 
   <div id="customAlert" role="alert">🎉 Congratulations! You scored the highest! 🎉</div>
   <audio id="congratsSound" src="sound/applause-sound.mp3" preload="auto"></audio>
+  <div id="gameOverAlert" class="custom-message" role="alert">
+    <p>😢 Game Over! The word was: <span id="revealedWord"></span></p>
+  </div>
 
 <script src="hangman.js"></script>
 </body>
