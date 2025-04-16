@@ -45,6 +45,7 @@ async function loadNewWord() {
   let category = document.getElementById("category").value || "food";
   let apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${numLetters}`;
 
+
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
