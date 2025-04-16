@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hangman Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hangnam.css">
+</head>
+<body>
+  <div id="wrapper">
+    <div class="card">
+      <div id="start-page">
+        <h1>Hangman Game</h1>
+        <label>Enter Your Name: <input type="text" id="playerName" required></label><br><br>
+        <label>Choose Level:
+          <select id="difficulty">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </label><br><br>
+        <label>Choose Category:
+          <select id="category">
+            <option value="">Loading...</option>
+          </select>
+        </label><br><br>
+        <button onclick="startGame()">Start Game</button>
+        <p class="highScore">High Score: <span id="highScore">0</span></p>
+      </div>
+
+      <div id="game-page" class="hidden">
+        <div class="scoreboard">
+          <p>Score: <span id="score">0</span> | High Score: <span id="highScoreInGame">0</span></p>
+          <p>Level: <span id="currentLevel">Easy</span></p>
+        </div>
+        <img id="mainImage" src="../hangman/img/stickman.jpg" alt="Hangman Image" width="200">
+        <h1>HANGMAN</h1>
+        <p id="hint"><span></span></p>
+        <h2 id="wordDisplay"></h2>
+        <p id="guess">Guesses: <span id="guesses">0</span>/6</p>
+        <div class="keyboard" id="keyboard"></div>
+        <button onclick="endGame()">End Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customAlert" role="alert">🎉 Congratulations! You scored the highest! 🎉</div>
+  <audio id="congratsSound" src="../hangman/sound/applause-sound.mp3" preload="auto"></audio>
+
+<script src="hangman.js"></script>
+</body>
+</html>

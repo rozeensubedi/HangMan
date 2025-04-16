@@ -1,184 +1,183 @@
-/* <style> */
+
 :root {
-    --primary: #4f46e5;
-    --bg: #f3f4f6;
-    --card: #ffffff;
-    --text: #1f2937;
-    --accent: #facc15;
-  }
-  
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Rubik', sans-serif;
-  }
-  
-  body {
-    background: linear-gradient(135deg, #e0e7ff, #fef9c3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-  
-  #wrapper {
-    width: 100%;
-    max-width: 600px;
-    padding: 1rem;
-  }
-  
+  --primary: #4f46e5;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --accent: #facc15;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #e0e7ff, #fef9c3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+}
+
+.card {
+  background-color: var(--card);
+  border-radius: 1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+label, select, input {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+input, select {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #4338ca;
+}
+
+.highScore {
+  margin-top: 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.scoreboard p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.keyboard button {
+  margin: 5px;
+  padding: 10px 14px;
+  font-size: 16px;
+  background-color: var(--primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.keyboard button:disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.keyboard button:hover:not(:disabled) {
+  background-color: #5041f2;
+}
+
+#mainImage {
+  max-width: 150px;
+  margin: 1rem auto;
+  display: block;
+}
+
+#hint {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+#guesses {
+  font-size: 1.5rem;
+  color: red;
+}
+
+#guess {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+#wordDisplay {
+  font-size: clamp(1.5rem);
+  letter-spacing: 0.5rem;
+  margin: 2rem 0;
+  text-transform: uppercase;
+}
+
+#customAlert {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffbea;
+  color: #333;
+  border: 2px solid #fcd34d;
+  padding: 20px 40px;
+  font-size: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  animation: popupFade 0.5s ease-out forwards;
+}
+
+@keyframes popupFade {
+  from { transform: translate(-50%, 50%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.emoji {
+  position: fixed;
+  font-size: 30px;
+  animation: emojiBurst 1s ease-out forwards;
+  z-index: 999;
+}
+
+@keyframes emojiBurst {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 600px) {
   .card {
-    background-color: var(--card);
-    border-radius: 1rem;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    animation: fadeIn 0.5s ease-in-out;
+    margin: 1rem;
+    padding: 1.5rem;
   }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--primary);
-  }
-  
-  label, select, input {
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-    font-weight: 600;
-  }
-  
-  input, select {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ccc;
-  }
-  
-  button {
-    background-color: var(--primary);
-    color: white;
-    padding: 0.7rem 2rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    margin-top: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #4338ca;
-  }
-  
-  .highScore {
-    margin-top: 1.2rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-  
-  .scoreboard p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .keyboard button {
-    margin: 5px;
-    padding: 10px 14px;
-    font-size: 16px;
-    background-color: var(--primary);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .keyboard button:disabled {
-    background-color: #e5e7eb;
-    color: #9ca3af;
-    cursor: not-allowed;
-  }
-  
-  .keyboard button:hover:not(:disabled) {
-    background-color: #5041f2;
-  }
-  
-  #mainImage {
-    max-width: 150px;
-    margin: 1rem auto;
-    display: block;
-  }
-  
-  #question {
-    font-size: 1.5rem;
-    margin: 1rem 0;
-  }
-  
-  #guesses {
-    font-size: 1.5rem;
-    color: red;
-  }
-  
-  #guess {
-    font-size: 1.5rem;
-    margin: 1rem 0;
-  }
-  
-  #wordDisplay {
-    font-size: clamp(1.5rem);
-    letter-spacing: 0.5rem;
-    margin: 2rem 0;
-    text-transform: uppercase;
-  }
-  
-  #customAlert {
-    position: fixed;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #fffbea;
-    color: #333;
-    border: 2px solid #fcd34d;
-    padding: 20px 40px;
-    font-size: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    z-index: 1000;
-    display: none;
-    animation: popupFade 0.5s ease-out forwards;
-  }
-  
-  @keyframes popupFade {
-    from { transform: translate(-50%, 50%); opacity: 0; }
-    to { transform: translate(-50%, 0); opacity: 1; }
-  }
-  
-  .emoji {
-    position: fixed;
-    font-size: 30px;
-    animation: emojiBurst 1s ease-out forwards;
-    z-index: 999;
-  }
-  
-  @keyframes emojiBurst {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-200px) scale(0.5); }
-  }
-  
-  .hidden {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  @media (max-width: 600px) {
-    .card {
-      margin: 1rem;
-      padding: 1.5rem;
-    }
-  }
-  /* </style> */
+}
