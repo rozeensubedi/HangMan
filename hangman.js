@@ -41,9 +41,10 @@ function startGame() {
   loadNewWord();
 }
 async function loadNewWord() {
-  let numLetters = currentDifficulty === "Easy" ? 4 : currentDifficulty === "Medium" ? 6 : 7;
+  let numLetters = currentDifficulty === "Easy" ? 4 : currentDifficulty === "Medium" ? 6 : 6;
   let category = document.getElementById("category").value || "food";
   let apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${numLetters}`;
+
 
   try {
     const response = await fetch(apiUrl);
