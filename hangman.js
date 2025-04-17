@@ -1,5 +1,32 @@
 let selectedWord = "", hint = "";
-let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6, currentDifficulty = "Easy";
+let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6;
+let currentDifficulty = "Easy";
+
+
+const wordPools = {
+  Easy: {},
+  Medium: {},
+  Hard: {}
+};
+
+const usedWords = {
+  Easy: new Set(),
+  Medium: new Set(),
+  Hard: new Set()
+};
+
+const difficultySettings = {
+  Easy: { start: 5, min: 4 },
+  Medium: { start: 7, min: 5 },
+  Hard: { start: 10, min: 7 }
+};
+
+let currentLengthByDifficulty = {
+  Easy: 5,
+  Medium: 7,
+  Hard: 10
+};
+
 
 window.onload = () => {
   loadCategories();
@@ -45,38 +72,60 @@ function startGame() {
   loadNewWord();
 }
 
+// loop which decrease and reset to the orignal length
 async function loadNewWord() {
-  let numLetters = currentDifficulty === "Easy" ? 4 : currentDifficulty === "Medium" ? 6 : 6;
-  let category = document.getElementById("category").value || "food";
-  let apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${numLetters}`;
-
-
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    if (!data || !data.length) {
-      alert("No data found.");
-      return;
-    }//////
-
-    const randomWordData = data[Math.floor(Math.random() * data.length)];
-    selectedWord = randomWordData.word.toLowerCase();
-    hint = randomWordData.hint || "Guess the word:";
-
-    guessedLetters = [];
-    guesses = 0;
-
-    document.getElementById("hint").textContent = hint;
-    document.getElementById("guesses").textContent = `${guesses}/6`;
-    updateWordDisplay();
-    updateKeyboard();
-    updateImage();
-  } catch (error) {
-    console.error("Error fetching word:", error);
-    alert("Failed to fetch word from API.");
+    const category = document.getElementById("category").value || "food";
+    const settings = difficultySettings[currentDifficulty];
+    let length = currentLengthByDifficulty[currentDifficulty];
+  
+    while (length >= settings.min) {
+      // Load pool if not already
+      if (!wordPools[currentDifficulty][length]) {
+        try {
+          const apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${length}`;
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          wordPools[currentDifficulty][length] = data || [];
+        } catch (err) {
+          console.error(`Error loading ${length}-letter words:`, err);
+          wordPools[currentDifficulty][length] = [];
+        }
+      }
+  
+      // Available word that not used
+      const pool = wordPools[currentDifficulty][length].filter(wordObj =>
+        !usedWords[currentDifficulty].has(wordObj.word.toLowerCase())
+      );
+  
+      if (pool.length > 0) {
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+        selectedWord = chosen.word.toLowerCase();
+        hint = chosen.hint || "Guess the word:";
+        usedWords[currentDifficulty].add(selectedWord);
+  
+        guessedLetters = [];
+        guesses = 0;
+  
+        document.getElementById("hint").textContent = hint;
+        document.getElementById("guesses").textContent = `${guesses}/6`;
+        updateWordDisplay();
+        updateKeyboard();
+        updateImage();
+        return;
+      }
+  
+      // if no more words at this length, try next smaller length
+      length--;
+      currentLengthByDifficulty[currentDifficulty] = length;
+    }
+  
+    // Reset back to start if all word completed
+    currentLengthByDifficulty[currentDifficulty] = settings.start;
+    usedWords[currentDifficulty].clear();
+    loadNewWord();
   }
-}
+  
+  
 
 function updateWordDisplay() {
   let display = "";
@@ -166,7 +215,6 @@ function updateImage() {
 }
 
 function showGameOverMessage(word) {
-  // const alertBox = document.getElementById("gameOverAlert");
   document.getElementById("gameOverAlert").style.display = "none";
 
   document.getElementById("revealedWord").textContent = word;
