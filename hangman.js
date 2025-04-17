@@ -2,7 +2,6 @@ let selectedWord = "", hint = "";
 let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6;
 let currentDifficulty = "Easy";
 
-
 const wordPools = {
   Easy: {},
   Medium: {},
@@ -26,7 +25,6 @@ let currentLengthByDifficulty = {
   Medium: 7,
   Hard: 10
 };
-
 
 window.onload = () => {
   loadCategories();
@@ -124,8 +122,6 @@ async function loadNewWord() {
     usedWords[currentDifficulty].clear();
     loadNewWord();
   }
-  
-  
 
 function updateWordDisplay() {
   let display = "";
