@@ -40,15 +40,15 @@ This is a classic Hangman game built with HTML, CSS, and JavaScript. Players can
 
 📷 Screenshots
 
-![image alt](https://github.com/rozeensubedi/Hangman/blob/8ba6f4ff88c141eee0460b12b33c64ef780de150/img/startPage.png)
+![image alt](https://github.com/rozeensubedi/Hangman/blob/777dae85324af691765dcc6aea68b718b0cf5c82/img/hangman-start-page.png)
 
-![image alt](https://github.com/rozeensubedi/Hangman/blob/8ba6f4ff88c141eee0460b12b33c64ef780de150/img/mainPage.png)
+![image alt](https://github.com/rozeensubedi/Hangman/blob/777dae85324af691765dcc6aea68b718b0cf5c82/img/hangman-game-page.png)
 
 ---
 
 🗂️ Project Structure
 
-- hangman							# Main folder
+- hangman					# Main folder
 	- /img                    		# Hangman image folder
 		- stickman.jpg
 		- stickman-1.jpg
@@ -57,10 +57,10 @@ This is a classic Hangman game built with HTML, CSS, and JavaScript. Players can
 		- hangman-start-page.png
 	- /sound                  		# Sound folder
 		- applause-sound.mp3
-	- /style.css					# CSS folder
+	- /style.css				# CSS folder
 		- style.css
 	- README.md               		# Project documentation (this file)
-	- hangman.html              	# Main HTML file
+	- hangman.html              		# Main HTML file
 
 ---
 
