@@ -1,18 +1,25 @@
 # 🎮 HangMan Game
 
-A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **JavaScript** — featuring multiple difficulty levels, emoji bursts, custom alerts, hangman visual feedback, and sound-based celebrations!
+A web-based Hangman game with category selection, difficulty levels, score tracking, and a polished user interface.
+
+---
+
+🧠 About the Project
+
+This is a classic Hangman game built with HTML, CSS, and JavaScript. Players can choose from different categories and difficulty levels, guess letters to reveal hidden words, and try to beat the high score. The game also includes sound effects and celebratory animations when a new high score is achieved.
 
 ---
 
 🕹️ How to Play
 
 1. Enter your name.
-2. Select a difficulty level: Easy, Medium, or Hard.
-3. Click Start Game.
-4. Read the question or hint, then guess the word one letter at a time.
-5. Use the on-screen keyboard or type letters.
-6. Guess correctly to increase your score.
-7. The game ends after 6 incorrect guesses.
+2. Choose levels: Easy, Medium, or Hard.
+3. Choose categoory: Animal, Country, Food, Plant, or Sport.
+4. Click Start Game.
+5. Read the question or hint, then guess the word one letter at a time.
+6. Use the on-screen keyboard or type letters.
+7. Guess correctly to increase your score.
+8. The game ends after 6 incorrect guesses.
 
 ---
 
@@ -20,12 +27,14 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 - Difficulty Levels: Easy, Medium, and Hard
 - Player Name Input
-- Dynamic Questions with Hints
-- Score Tracking & High Score Persistence (LocalStorage)
-- Visual Feedback with Hangman Image Progression
+- Dynamic category loading from Word Game DB 
+- Real-time score and high score tracking using localStorage
+- Keyboard input support
+- Word pool reset after completion
 - Sound Effects on High Score
 - Emoji Animation Bursts for Celebrations
 - Responsive UI Design
+- Progressive hangman images as lives decrease
 
 ---
 
@@ -39,18 +48,19 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 🗂️ Project Structure
 
-- hangman				# Main folder
-	- /img                    	# Hangman image folder
+- hangman							# Main folder
+	- /img                    		# Hangman image folder
 		- stickman.jpg
 		- stickman-1.jpg
 		- ... up to stickman-6.jpg
-		- startPage.png
-		- mainPage.png
-	- /sound                  	# Sound folder
+		- hangman-game-Page.png
+		- hangman-start-page.png
+	- /sound                  		# Sound folder
 		- applause-sound.mp3
-	- README.md               	# Project documentation (this file)
+	- /style.css					# CSS folder
+		- style.css
+	- README.md               		# Project documentation (this file)
 	- hangman.html              	# Main HTML file
-	- hangman.css                	# CSS Stylesheet
 
 ---
 
@@ -61,6 +71,8 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 - CSS
 
 - JavaScript
+
+- External API
 
 - <audio> tag for sound effects
 
@@ -98,7 +110,7 @@ A fun and interactive **Hangman** game built using **HTML**, **CSS**, and **Java
 
 3. Launch the game:
 
-	- Open index.html in your preferred browser.
+	- Open hangman.html in your preferred browser.
 
 	- Start playing! 🎉
 
