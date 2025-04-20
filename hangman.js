@@ -1,30 +1,9 @@
 let selectedWord = "", hint = "";
-let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6;
-let currentDifficulty = "Easy";
-
-const wordPools = {
-  Easy: {},
-  Medium: {},
-  Hard: {}
-};
-
-const usedWords = {
-  Easy: new Set(),
-  Medium: new Set(),
-  Hard: new Set()
-};
-
-const difficultySettings = {
-  Easy: { start: 5, min: 4 },
-  Medium: { start: 7, min: 5 },
-  Hard: { start: 10, min: 7 }
-};
-
-let currentLengthByDifficulty = {
-  Easy: 5,
-  Medium: 7,
-  Hard: 10
-};
+let score = 0, highScore = 0, guesses = 0, guessedLetters = [], maxGuesses = 6, currentDifficulty = "Easy";
+let usedWords = new Set();
+let currentWordLength = 0;
+let manuallyEnded = false;
+let gameOverTimeout = null;
 
 window.onload = () => {
   loadCategories();
@@ -49,6 +28,12 @@ async function loadCategories() {
 }
 
 function startGame() {
+  manuallyEnded = false;
+  if (gameOverTimeout) {
+    clearTimeout(gameOverTimeout);
+    gameOverTimeout = null;
+  }
+
   const name = document.getElementById('playerName').value.trim();
   if (!name) return alert("Name is required!");
 
@@ -57,9 +42,9 @@ function startGame() {
   document.getElementById('game-page').classList.remove('hidden');
   document.getElementById("currentLevel").innerText = currentDifficulty;
 
-  
   document.getElementById("gameOverAlert").style.display = "none";
-  document.getElementById("customAlert").style.display = "none";
+  document.getElementById("noWordsAlert").style.display = "none";
+
 
   score = 0;
   highScore = parseInt(localStorage.getItem("hangmanHighScore")) || 0;
@@ -67,61 +52,56 @@ function startGame() {
   document.getElementById("highScore").innerText = highScore;
   document.getElementById("highScoreInGame").innerText = highScore;
 
+  usedWords.clear();
+  currentWordLength = currentDifficulty === "Easy" ? 4 : currentDifficulty === "Medium" ? 6 : 9;
+
   loadNewWord();
 }
 
-// loop which decrease and reset to the orignal length
-async function loadNewWord() {
-    const category = document.getElementById("category").value || "food";
-    const settings = difficultySettings[currentDifficulty];
-    let length = currentLengthByDifficulty[currentDifficulty];
-  
-    while (length >= settings.min) {
-      // Load pool if not already
-      if (!wordPools[currentDifficulty][length]) {
-        try {
-          const apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${length}`;
-          const response = await fetch(apiUrl);
-          const data = await response.json();
-          wordPools[currentDifficulty][length] = data || [];
-        } catch (err) {
-          console.error(`Error loading ${length}-letter words:`, err);
-          wordPools[currentDifficulty][length] = [];
-        }
-      }
-  
-      // Available word that not used
-      const pool = wordPools[currentDifficulty][length].filter(wordObj =>
-        !usedWords[currentDifficulty].has(wordObj.word.toLowerCase())
-      );
-  
-      if (pool.length > 0) {
-        const chosen = pool[Math.floor(Math.random() * pool.length)];
-        selectedWord = chosen.word.toLowerCase();
-        hint = chosen.hint || "Guess the word:";
-        usedWords[currentDifficulty].add(selectedWord);
-  
-        guessedLetters = [];
-        guesses = 0;
-  
-        document.getElementById("hint").textContent = hint;
-        document.getElementById("guesses").textContent = `${guesses}/6`;
-        updateWordDisplay();
-        updateKeyboard();
-        updateImage();
-        return;
-      }
-  
-      // if no more words at this length, try next smaller length
-      length--;
-      currentLengthByDifficulty[currentDifficulty] = length;
-    }
-  
-    // Reset back to start if all word completed
-    currentLengthByDifficulty[currentDifficulty] = settings.start;
-    usedWords[currentDifficulty].clear();
-    loadNewWord();
+async function loadNewWord() {      ////
+
+  if (currentWordLength <= 0) {
+    document.getElementById("noWordsAlert").style.display = "block";
+    disableKeyboard();
+    return;
   }
+  
+  document.getElementById("noWordsAlert").style.display = "none";
+
+  const category = document.getElementById("category").value || "food";
+  const apiUrl = `https://www.wordgamedb.com/api/v1/words/?category=${category}&numLetters=${currentWordLength}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    const availableWords = data.filter(item => !usedWords.has(item.word.toLowerCase()));
+
+    if (availableWords.length === 0) {
+      currentWordLength--;
+      loadNewWord();
+      return;
+    }
+
+    const randomWordData = availableWords[Math.floor(Math.random() * availableWords.length)];
+    selectedWord = randomWordData.word.toLowerCase();
+    hint = randomWordData.hint || "Guess the word:";
+    usedWords.add(selectedWord);
+
+    guessedLetters = [];
+    guesses = 0;
+
+    document.getElementById("hint").textContent = hint;
+    document.getElementById("guesses").textContent = `${guesses}/6`;
+    updateWordDisplay();
+    updateKeyboard();
+    updateImage();
+  } 
+  catch (error) {
+    console.error("Error fetching word:", error);
+    alert("Failed to fetch word from API.");
+  }
+}
 
 function updateWordDisplay() {
   let display = "";
@@ -178,14 +158,11 @@ function handleLetterClick(letter) {
     document.getElementById("guesses").textContent = `${guesses}/6`;
     updateImage();
 
-
     if (guesses >= maxGuesses) {
       document.getElementById("guesses").textContent = `${guesses}/6`;
       updateImage();
-      setTimeout(() => {
-        showGameOverMessage(selectedWord);
-      }, 100);
-    } 
+      showGameOverMessage(selectedWord); 
+    }
   }
 
   updateKeyboard();
@@ -206,29 +183,16 @@ function updateScore() {
 }
 
 function updateImage() {
+  if (manuallyEnded) return;
   const image = document.getElementById("mainImage");
   image.src = `img/stickman${guesses === 0 ? "" : "-" + guesses}.jpg`;
 }
 
 function showGameOverMessage(word) {
-  document.getElementById("gameOverAlert").style.display = "none";
-
+  const alertBox = document.getElementById("gameOverAlert");
   document.getElementById("revealedWord").textContent = word;
   alertBox.style.display = "block";
-  
-  setTimeout(() => {
-    alertBox.style.display = "none";
-    endGame();
-  }, 3000); 
-}
-
-
-function showCustomAlert() {
-  const alertBox = document.getElementById("customAlert");
-  alertBox.style.display = "block";
-  setTimeout(() => {
-    alertBox.style.display = "none";
-  }, 2000);
+  disableKeyboard();
 }
 
 function playCongratsSound() {
@@ -255,15 +219,28 @@ function createEmoji(char, side) {
 }
 
 function endGame() {
+  manuallyEnded = true;
+
+  
+
+  if (gameOverTimeout) {
+    clearTimeout(gameOverTimeout);
+    gameOverTimeout = null;
+  }
+
+  // makes visible
   document.getElementById("start-page").classList.remove("hidden");
   document.getElementById("game-page").classList.add("hidden");
-}
 
-function showGameOverMessage(word) {
-  const alertBox = document.getElementById("gameOverAlert");
-  document.getElementById("revealedWord").textContent = word;
-  alertBox.style.display = "block";
-  disableKeyboard();
+  // Reset image
+  document.getElementById("mainImage").src = "img/stickman.jpg";
+
+  //hide noWordsAlert
+  document.getElementById("noWordsAlert").style.display = "none";
+
+  // Hide game over alert
+  document.getElementById("gameOverAlert").style.display = "none";
+
 }
 
 function disableKeyboard() {
