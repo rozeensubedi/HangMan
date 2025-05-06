@@ -247,3 +247,21 @@ function disableKeyboard() {
   const buttons = document.querySelectorAll("#keyboard button");
   buttons.forEach(btn => btn.disabled = true);
 }
+
+
+  function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.classList.add('snowflake');
+    snowflake.textContent = '❄';
+
+    snowflake.style.left = Math.random() * window.innerWidth + 'px';
+    snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    snowflake.style.animationDuration = (Math.random() * 3 + 3) + 's';
+
+    document.getElementById('snowfall').appendChild(snowflake);
+
+    setTimeout(() => snowflake.remove(), 8000);
+  }
+
+  setInterval(createSnowflake, 200); 
+
