@@ -265,3 +265,48 @@ function disableKeyboard() {
 
   setInterval(createSnowflake, 200); 
 
+
+  const canvas = document.getElementById("stickmanCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let angle = 0;
+
+  function drawStickman(x, y, angle) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // for head
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // for body
+    ctx.beginPath();
+    ctx.moveTo(x, y + 10);
+    ctx.lineTo(x, y + 50);
+    ctx.stroke();
+
+    // for arms
+    ctx.beginPath();
+    ctx.moveTo(x, y + 25);
+    ctx.lineTo(x + 20 * Math.cos(angle), y + 25 + 20 * Math.sin(angle));
+    ctx.moveTo(x, y + 25);
+    ctx.lineTo(x - 20 * Math.cos(angle), y + 25 - 20 * Math.sin(angle));
+    ctx.stroke();
+
+    // for legs
+    ctx.beginPath();
+    ctx.moveTo(x, y + 50);
+    ctx.lineTo(x + 20 * Math.cos(angle), y + 80);
+    ctx.moveTo(x, y + 50);
+    ctx.lineTo(x - 20 * Math.cos(angle), y + 80);
+    ctx.stroke();
+  }
+
+  function animate() {
+    angle = Math.sin(Date.now() / 200) * 0.5;
+    drawStickman(50, 40, angle); 
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+  
